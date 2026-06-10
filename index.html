@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#FF8C42">
+  <title>Are you ready for Barcelona? 🌞</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Caveat:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --orange: #FF8C42;
+      --coral:  #FF6B6B;
+      --pink:   #FF5D8F;
+      --yellow: #FFC93C;
+      --sky:    #2EC4F1;
+      --teal:   #06BCC1;
+      --ink:    #3A2A1E;
+      --cream:  #FFF6EC;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--cream);
+      overflow-x: hidden;
+      color: var(--ink);
+    }
+
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ══════════════════════════════
+       LANDING SCREEN
+    ══════════════════════════════ */
+    #landing {
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      background: linear-gradient(160deg, #FFD23F 0%, #FF8C42 32%, #FF5D8F 64%, #2EC4F1 100%);
+      position: relative;
+      overflow: hidden;
+      transition: opacity 0.8s ease;
+    }
+
+    /* sun glow */
+    #landing::before {
+      content: '';
+      position: absolute;
+      top: -120px;
+      right: -120px;
+      width: 380px;
+      height: 380px;
+      background: radial-gradient(circle, rgba(255,255,255,0.85) 0%, rgba(255,230,150,0.4) 40%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .emoji-rain {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .ep {
+      position: absolute;
+      bottom: -4rem;
+      animation: rise linear infinite;
+      will-change: transform;
+      user-select: none;
+    }
+
+    @keyframes rise {
+      0%   { transform: translateY(0) rotate(0deg);   opacity: 0; }
+      8%   { opacity: 0.85; }
+      90%  { opacity: 0.85; }
+      100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+    }
+
+    .landing-inner {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.4rem;
+    }
+
+    .flags {
+      font-size: 2.2rem;
+      letter-spacing: 0.6rem;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2));
+    }
+
+    .landing-eyebrow {
+      font-family: 'Caveat', cursive;
+      font-size: 1.5rem;
+      letter-spacing: 0.02em;
+      color: #fff;
+      font-weight: 600;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.18);
+      transform: rotate(-3deg);
+    }
+
+    .landing-q {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: clamp(2.8rem, 9.5vw, 5.8rem);
+      line-height: 1.05;
+      color: #fff;
+      text-shadow: 0 6px 0 rgba(0,0,0,0.10), 0 10px 26px rgba(0,0,0,0.22);
+    }
+
+    .landing-q em {
+      color: #FFF3B0;
+      font-style: normal;
+      display: inline-block;
+      animation: wiggle 2.6s ease-in-out infinite;
+    }
+
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(-3deg) scale(1); }
+      50%       { transform: rotate(3deg) scale(1.05); }
+    }
+
+    .landing-hint {
+      color: #fff;
+      font-size: 1.05rem;
+      font-weight: 400;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .yes-btn {
+      margin-top: 0.5rem;
+      font-family: 'Fredoka', sans-serif;
+      padding: 1.05rem 4.5rem;
+      font-size: 1.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: 4px solid #FFF3B0;
+      border-radius: 100px;
+      cursor: pointer;
+      background: #fff;
+      color: #FF5D8F;
+      box-shadow: 0 8px 0 #E8632F, 0 14px 30px rgba(0,0,0,0.22);
+      animation: bob 1.8s ease-in-out infinite;
+      transition: transform 0.12s, box-shadow 0.12s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .yes-btn:hover  { transform: scale(1.08) rotate(-1.5deg); animation: none; }
+    .yes-btn:active { transform: translateY(6px) scale(0.98); box-shadow: 0 2px 0 #E8632F, 0 6px 16px rgba(0,0,0,0.22); }
+
+    @keyframes bob {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-8px); }
+    }
+
+    .no-hint {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.9);
+      font-style: italic;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.18);
+    }
+
+    /* ══════════════════════════════
+       TRIP SCREEN
+    ══════════════════════════════ */
+    #trip {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.7s ease;
+    }
+
+    .trip-hero {
+      min-height: 66dvh;
+      background: linear-gradient(160deg, #FFD23F 0%, #FF8C42 38%, #FF5D8F 78%, #2EC4F1 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4.5rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .trip-hero::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0; right: 0;
+      height: 90px;
+      background: linear-gradient(to bottom, transparent, var(--cream));
+    }
+
+    .photo-ring {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: #fff;
+      padding: 5px;
+      margin-bottom: 2.2rem;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 14px 40px rgba(0,0,0,0.25);
+      position: relative;
+      z-index: 2;
+    }
+
+    .photo-ring {
+      border: 5px solid #FFF3B0;
+      animation: bob 3s ease-in-out infinite;
+    }
+
+    .photo-ring:hover { transform: scale(1.05) rotate(-4deg); animation: none; }
+
+    .photo-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FFE8C2, #FFD0E0);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .photo-inner img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+
+    .photo-inner .pi-text {
+      font-size: 0.75rem;
+      color: #C2654A;
+      text-align: center;
+      padding: 0.8rem;
+      line-height: 1.5;
+      font-weight: 600;
+    }
+
+    .photo-inner .pi-icon { font-size: 1.9rem; margin-bottom: 0.3rem; }
+
+    .trip-hero h1 {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: clamp(2.2rem, 7.5vw, 4rem);
+      line-height: 1.1;
+      margin-bottom: 1.1rem;
+      color: #fff;
+      text-shadow: 0 5px 0 rgba(0,0,0,0.10), 0 10px 24px rgba(0,0,0,0.2);
+      position: relative; z-index: 2;
+    }
+
+    .trip-hero h1 span { color: #FFF3B0; }
+
+    .trip-hero p {
+      max-width: 560px;
+      color: #fff;
+      font-size: 1.05rem;
+      line-height: 1.8;
+      font-weight: 400;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.18);
+      position: relative; z-index: 2;
+    }
+
+    .trip-hero p strong { color: #FFF3B0; font-weight: 700; }
+
+    /* itinerary */
+    .itinerary {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 3.5rem 1.5rem 2rem;
+    }
+
+    .section-eyebrow {
+      text-align: center;
+      font-family: 'Caveat', cursive;
+      font-size: 2.1rem;
+      color: #E8632F;
+      font-weight: 700;
+      margin-bottom: 2.6rem;
+      transform: rotate(-2deg);
+    }
+
+    /* day cards */
+    .day-card {
+      --tilt: -1.4deg;
+      background: #fff;
+      border: 3px solid #2A1C12;
+      border-radius: 26px;
+      overflow: hidden;
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      transform: translateY(28px) rotate(var(--tilt));
+      transition: opacity 0.55s ease, transform 0.35s cubic-bezier(.34,1.56,.64,1), box-shadow 0.3s;
+      box-shadow: 8px 8px 0 rgba(42,28,18,0.85);
+    }
+
+    .day-card:nth-child(even) { --tilt: 1.6deg; }
+    .day-card:nth-child(3n)   { --tilt: -2.2deg; }
+
+    .day-card.in { opacity: 1; transform: translateY(0) rotate(var(--tilt)); }
+
+    .day-card:hover {
+      transform: translateY(-6px) rotate(0deg) scale(1.02);
+      box-shadow: 12px 14px 0 rgba(255,93,143,0.45);
+    }
+
+    /* photo banner per plan */
+    .day-photo {
+      display: block;
+      width: 100%;
+      height: 190px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .day-photo input { display: none; }
+
+    .dp-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.92rem;
+      letter-spacing: 0.02em;
+      transition: filter 0.25s;
+    }
+
+    .day-photo:hover .dp-placeholder { filter: brightness(1.08); }
+
+    .dp-placeholder .dp-icon { font-size: 2.3rem; animation: bob 2.4s ease-in-out infinite; }
+    .dp-placeholder small {
+      font-size: 0.72rem;
+      font-weight: 400;
+      opacity: 0.9;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .day-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .day-photo .edit-badge {
+      position: absolute;
+      top: 12px; right: 12px;
+      background: rgba(0,0,0,0.45);
+      color: #fff;
+      font-size: 0.72rem;
+      padding: 0.3rem 0.7rem;
+      border-radius: 100px;
+      backdrop-filter: blur(4px);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .day-photo:hover .edit-badge { opacity: 1; }
+
+    .day-body { padding: 1.6rem 1.8rem 1.9rem; }
+
+    .day-head {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .day-icon {
+      flex-shrink: 0;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      border: 3px solid #2A1C12;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      box-shadow: 3px 3px 0 rgba(42,28,18,0.85);
+    }
+
+    .day-card:hover .day-icon { animation: jiggle 0.6s ease-in-out infinite; }
+
+    @keyframes jiggle {
+      0%, 100% { transform: rotate(-8deg) scale(1.08); }
+      50%       { transform: rotate(8deg) scale(1.08); }
+    }
+
+    .day-meta {
+      display: inline-block;
+      font-family: 'Fredoka', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 0.72rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      background: #FFF3B0;
+      color: #2A1C12 !important;
+      padding: 0.15rem 0.6rem;
+      border-radius: 100px;
+      border: 2px solid #2A1C12;
+    }
+
+    .day-title {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 600;
+      font-size: 1.45rem;
+      color: var(--ink);
+      line-height: 1.15;
+    }
+
+    .day-loc {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: #FFF1E2;
+      border-radius: 20px;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.8rem;
+      color: #C2654A;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      border: 2px dashed #F0B68C;
+    }
+
+    .day-desc {
+      color: #5C4A3D;
+      line-height: 1.75;
+      font-size: 0.95rem;
+    }
+
+    /* accent palettes (banner gradient + icon + meta) */
+    .c1 .day-photo .dp-placeholder, .c1 .day-icon { background: linear-gradient(135deg,#FF8C42,#FF5D8F); }
+    .c1 .day-meta { color: #E8632F; }
+    .c2 .day-photo .dp-placeholder, .c2 .day-icon { background: linear-gradient(135deg,#2EC4F1,#1D7FE0); }
+    .c2 .day-meta { color: #1D7FE0; }
+    .c3 .day-photo .dp-placeholder, .c3 .day-icon { background: linear-gradient(135deg,#06BCC1,#3DD68C); }
+    .c3 .day-meta { color: #06A6AB; }
+    .c4 .day-photo .dp-placeholder, .c4 .day-icon { background: linear-gradient(135deg,#A24BFF,#FF5D8F); }
+    .c4 .day-meta { color: #9333EA; }
+    .c5 .day-photo .dp-placeholder, .c5 .day-icon { background: linear-gradient(135deg,#FFC93C,#FF8C42); }
+    .c5 .day-meta { color: #E8943C; }
+    .c6 .day-photo .dp-placeholder, .c6 .day-icon { background: linear-gradient(135deg,#FF5D8F,#A24BFF); }
+    .c6 .day-meta { color: #E84B7E; }
+    .c7 .day-photo .dp-placeholder, .c7 .day-icon { background: linear-gradient(135deg,#3DD68C,#2EC4F1); }
+    .c7 .day-meta { color: #16A864; }
+    .c8 .day-photo .dp-placeholder, .c8 .day-icon { background: linear-gradient(135deg,#FF5D8F,#FF8C42); }
+    .c8 .day-meta { color: #E84B7E; }
+    .c9 .day-photo .dp-placeholder, .c9 .day-icon { background: linear-gradient(135deg,#FFC93C,#FF5D8F,#2EC4F1); }
+    .c9 .day-meta { color: #E8943C; }
+
+    .hl-blue   { color: #1D7FE0; font-weight: 700; }
+    .hl-purple { color: #9333EA; font-weight: 700; }
+    .hl-pink   { color: #E84B7E; font-weight: 700; }
+
+    /* closing */
+    .closing {
+      text-align: center;
+      padding: 2.5rem 2rem 6rem;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .closing .heartbeat {
+      font-size: 3.5rem;
+      display: block;
+      margin-bottom: 1.3rem;
+      animation: hb 1.4s ease-in-out infinite;
+    }
+
+    @keyframes hb { 0%,100%{transform:scale(1);} 50%{transform:scale(1.18);} }
+
+    .closing h2 {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.7rem, 5.2vw, 2.5rem);
+      margin-bottom: 1.1rem;
+      line-height: 1.2;
+      color: var(--ink);
+    }
+
+    .closing p {
+      color: #5C4A3D;
+      line-height: 1.9;
+      font-size: 1rem;
+    }
+
+    .closing p strong { color: #E8632F; font-weight: 700; }
+
+    .closing .pack {
+      display: inline-block;
+      margin-top: 2.3rem;
+      padding: 0.85rem 2.6rem;
+      border-radius: 100px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.05em;
+      background: linear-gradient(135deg,#FF8C42,#FF5D8F);
+      box-shadow: 0 10px 26px rgba(255,93,143,0.35);
+    }
+
+    @media (max-width: 520px) {
+      .day-photo { height: 160px; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+
+<!-- ══ LANDING ══ -->
+<section id="landing">
+  <div class="emoji-rain" id="emojiRain"></div>
+
+  <div class="landing-inner">
+    <div class="flags">🇪🇸 ✈️ 🇪🇸</div>
+    <p class="landing-eyebrow">A message from me, to you</p>
+    <h1 class="landing-q">
+      Are you ready<br>for <em>Barcelona?</em>
+    </h1>
+    <p class="landing-hint">I've been planning something just for us. 🤍</p>
+    <button class="yes-btn" id="yesBtn">YES ✨</button>
+    <p class="no-hint">(that's literally the only option, babe)</p>
+  </div>
+</section>
+
+<!-- ══ TRIP ══ -->
+<section id="trip">
+
+  <div class="trip-hero">
+    <label class="photo-ring" for="photoInput" title="Click to add our photo">
+      <input type="file" id="photoInput" accept="image/*">
+      <div class="photo-inner" id="photoInner">
+        <div class="pi-icon">📸</div>
+        <div class="pi-text">Add our photo<br>here ✨</div>
+      </div>
+    </label>
+
+    <h1>Our <span>Barcelona</span> Adventure 🌞</h1>
+    <p>
+      Because you said <strong>yes</strong> (the only right answer) —
+      here's everything I've been dreaming up for us.
+      Get excited. This is going to be <strong>the best trip</strong> of our lives.
+    </p>
+  </div>
+
+  <div class="itinerary">
+    <p class="section-eyebrow">✦ The Itinerary ✦</p>
+
+    <!-- Day 1 -->
+    <div class="day-card c1">
+      <label class="day-photo" for="p1">
+        <input type="file" id="p1" accept="image/*">
+        <div class="dp-placeholder"><span class="dp-icon">📷</span>Add a photo for this day<small>tap to upload</small></div>
+        <span class="edit-badge">✎ change photo</span>
+      </label>
+      <div class="day-body">
+        <div class="day-head">
+          <div class="day-icon">🍢</div>
+          <div>
+            <div class="day-meta">Day 1 · Friday</div>
+            <h3 class="day-title">Pintxos Night in Barcelona</h3>
+          </div>
+        </div>
+        <div class="day-loc">📍 Barcelona</div>
+        <p class="day-desc">
+          Starting this trip the right way — pintxos, drinks, and the best company in the world (obviously me 😌).
+          Small bites, big vibes, even bigger smiles. Welcome to Spain, baby. 🥂
+        </p>
+      </div>
+    </div>
+
+    <!-- Day 2 -->
+    <div class="day-card c2">
+      <label class="day-photo" for="p2">
+        <input type="file" id="p2" accept="image/*">
+        <div class="dp-placeholder"><span class="dp-icon">📷</span>Add a photo for this day<small>tap to upload</small></div>
+        <span class="edit-badge">✎ change photo</span>
+      </label>
+      <div class="day-body">
+        <div class="day-head">
+          <div class="day-icon">🏖️</div>
+          <div>
+            <div class="day-meta">Day 2 · Saturday</div>
+            <h3 class="day-title">Sitges by Day · World Cup by Night</h3>
+          </div>
+        </div>
+        <div class="day-loc">📍 Sitges → Barcelona</div>
+        <p class="day-desc">
+          A day trip to the most gorgeous coastal town — sun, sea, and you. Soaking up every drop of that Mediterranean magic.
+          Then back to Barcelona to watch <span class="hl-blue">Morocco vs Brazil</span> together. World Cup energy only. ⚽🔥
+        </p>
+      </div>
+    </div>
+
+    <!-- Day 3 -->
+    <div class="day-card c3">
+      <label class="day-photo" for="p3">
+        <input type="file" id="p3" accept="image/*">
+        <div class="dp-placeholder"><span class="dp-icon">📷</span>Add a photo for this day<small>tap to upload</small></div>
+        <span class="edit-badge">✎ change photo</span>
+      </label>
+      <div class="day-body">
+        <div class="day-head">
+          <div class="day-icon">🚲</div>
+          <div>
+            <div class="day-meta">Day 3 · Sunday</div>
+            <h3 class="day-title">Chill Bike Ride Around the City</h3>
+          </div>
+        </div>
+        <div class="day-loc">📍 Barcelona</div>
+        <p class="day-desc">
+          No agenda. No rush. Just us, two bikes, and the whole city to explore.
+          Breezy streets, golden light, and good music in our ears. This is the Sunday reset we deserve. 🌅
+        </p>
+      </div>
+    </div>
+
+    <!-- Day 4 -->
+    <div class="day-card c4">
+      <label class="day-photo" for="p4">
+        <input type="file" id="p4" accept="image/*">
+        <div class="dp-placeholder"><span class="dp-icon">📷</span>Add a photo for this day<small>tap to upload</small></div>
+        <span class="edit-badge">✎ change photo</span>
+      </label>
+      <div class="day-body">
+        <div class="day-head">
+          <div class="day-icon">🎵</div>
+          <div>
+            <div class="day-meta">Day 4 · Monday</div>
+            <h3 class="day-title">Bad Bunny Live in Madrid 🐰</h3>
+          </div>
+        </div>
+        <div class="day-loc">📍 Madrid</div>
+        <p class="day-desc">
+          We're hopping to Madrid and seeing <span class="hl-purple">Bad Bunny LIVE</span>.
+          Yes. This is actually happening. Get ready to lose your voice singing every single word.
+          You're welcome, babe. 🎤✨
+        </p>
+      </div>
+    </div>
+
+    <!-- Day 5 -->
+    <div class="day-card c5">
+      <label class="day-photo" for="p5">
+        <input type="file" id="p5" accept="image/*">
+        <div class="dp-placeholder"><span class="dp-icon">📷</span>Add a photo for this day<small>tap to upload</small></div>
+        <span class="edit-badge">✎ change photo</span>
+      </label>
+      <div class="day-body">
+        <div class="day-head">
+          <div class="day-icon">🎨</div>
+          <div>
+            <div class="day-meta">Day 5 · Tuesday</div>
+            <h3 class="day-title">Reina Sofía Museum — Full Day</h3>
+          </div>
+        </div>
+        <div class="day-loc">📍 Madrid</div>
+        <p class="day-desc">
+          A full day in one of the world's most iconic museums. Picasso, Dalí, all of it.
+          And you — my absolute favorite masterpiece in every room we walk into. 🖼️
+        </p>
+      </div>
+    </div>
+
+    <!-- Day 6 -->
+    <div class="day-card c7">
+      <label class="day-photo" for="p7">
+        <input type="file" id="p7" accept="image/*">
+        <div class="dp-placeholder"><span class="dp-icon">📷</span>Add a photo for this day<small>tap to upload</small></div>
+        <span class="edit-badge">✎ change photo</span>
+      </label>
+      <div class="day-body">
+        <div class="day-head">
+          <div class="day-icon">⛰️</div>
+          <div>
+            <div class="day-meta">Day 6 · Thursday</div>
+            <h3 class="day-title">Hike to Montserrat</h3>
+          </div>
+        </div>
+        <div class="day-loc">📍 Montserrat</div>
+        <p class="day-desc">
+          We're hiking up to one of the most magical places near Barcelona.
+          Jagged mountain peaks, wide-open views, and that feeling at the top that only we'll share.
+          We earned this one together. 🏔️
+        </p>
+      </div>
+    </div>
+
+    <!-- Day 8 -->
+    <div class="day-card c8">
+      <label class="day-photo" for="p8">
+        <input type="file" id="p8" accept="image/*">
+        <div class="dp-placeholder"><span class="dp-icon">📷</span>Add a photo for this day<small>tap to upload</small></div>
+        <span class="edit-badge">✎ change photo</span>
+      </label>
+      <div class="day-body">
+        <div class="day-head">
+          <div class="day-icon">🎶</div>
+          <div>
+            <div class="day-meta">Day 7 · Friday</div>
+            <h3 class="day-title">Razzmatazz — Naika Live 🎉</h3>
+          </div>
+        </div>
+        <div class="day-loc">📍 Barcelona</div>
+        <p class="day-desc">
+          Dancing all night at Razzmatazz watching <span class="hl-pink">Naika</span> live —
+          our last big plan of the trip, and we're going out with a bang.
+          One more night of magic, just the two of us. 💫
+        </p>
+      </div>
+    </div>
+
+  </div><!-- /itinerary -->
+
+  <div class="closing">
+    <span class="heartbeat">💛</span>
+    <h2>Can't wait to do all of this with you.</h2>
+    <p>
+      Two cities. A million memories we haven't made yet.
+      I've been looking forward to this for so long — and I know in my heart it's going to be
+      <strong>absolutely perfect</strong> because I'm doing it with you.
+      <br><br>
+      I hope this makes you even more hyped than you already are — because I need all your excitement. 🤍
+      <br><br>
+      Now stop reading and finish packing.
+    </p>
+  </div>
+
+</section>
+
+<script>
+  /* ── floating emoji rain ── */
+  const EMOJIS = ['✈️','🌊','🎸','💃','🌹','🎵','⛰️','🏖️','🎉','💛','🌞','🍢','🎨','🐰','🚲','⚽'];
+  const rain = document.getElementById('emojiRain');
+  for (let i = 0; i < 22; i++) {
+    const el = document.createElement('div');
+    el.className = 'ep';
+    el.textContent = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+    el.style.cssText = `
+      left: ${Math.random() * 100}%;
+      font-size: ${1.1 + Math.random() * 1.4}rem;
+      animation-duration: ${9 + Math.random() * 14}s;
+      animation-delay: ${Math.random() * 12}s;
+    `;
+    rain.appendChild(el);
+  }
+
+  /* ── YES button ── */
+  document.getElementById('yesBtn').addEventListener('click', () => {
+    launchConfetti();
+    const landing = document.getElementById('landing');
+    const trip    = document.getElementById('trip');
+    setTimeout(() => {
+      landing.style.opacity = '0';
+      setTimeout(() => {
+        landing.style.display = 'none';
+        trip.style.display = 'block';
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          trip.style.opacity = '1';
+          initCardObserver();
+        }));
+      }, 800);
+    }, 500);
+  });
+
+  /* ── card reveal on scroll ── */
+  function initCardObserver() {
+    const cards = document.querySelectorAll('.day-card');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    cards.forEach((c, i) => { c.style.transitionDelay = `${i * 0.05}s`; obs.observe(c); });
+  }
+
+  /* ── main couple photo upload ── */
+  document.getElementById('photoInput').addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      document.getElementById('photoInner').innerHTML = `<img src="${ev.target.result}" alt="Us">`;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  /* ── per-plan photo uploads ── */
+  document.querySelectorAll('.day-photo input').forEach(input => {
+    input.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const label = input.closest('.day-photo');
+        const ph = label.querySelector('.dp-placeholder');
+        let img = label.querySelector('img');
+        if (!img) {
+          img = document.createElement('img');
+          label.insertBefore(img, label.firstChild);
+        }
+        img.src = ev.target.result;
+        if (ph) ph.style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+
+  /* ── confetti ── */
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx    = canvas.getContext('2d');
+  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const COLORS = ['#FFC93C','#FF8C42','#FF5D8F','#2EC4F1','#06BCC1','#A24BFF','#fff','#3DD68C'];
+
+  function launchConfetti() {
+    const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+    const particles = Array.from({ length: 240 }, () => ({
+      x: cx, y: cy,
+      vx: (Math.random() - 0.5) * 22,
+      vy: (Math.random() - 1.1) * 18,
+      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      w: 5 + Math.random() * 8,
+      h: 3 + Math.random() * 5,
+      rot: Math.random() * 360,
+      rotV: (Math.random() - 0.5) * 12,
+      life: 1,
+    }));
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      let any = false;
+      for (const p of particles) {
+        p.x += p.vx; p.y += p.vy; p.vy += 0.55; p.vx *= 0.98; p.rot += p.rotV; p.life -= 0.007;
+        if (p.life <= 0) continue;
+        any = true;
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, p.life);
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot * Math.PI / 180);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+        ctx.restore();
+      }
+      if (any) requestAnimationFrame(draw);
+      else ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    draw();
+  }
+</script>
+</body>
+</html>
